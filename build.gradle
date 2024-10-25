@@ -37,14 +37,8 @@ allprojects {
   }
 }
 
-plugins {
-  
-  id 'maven-publish'
-}
 
 publishing {
-  
-
   repositories {
     maven {
       name = "GitHubPackages"
