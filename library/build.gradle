@@ -1,7 +1,32 @@
-import org.gradle.internal.os.OperatingSystem
-
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        
+        minSdkVersion 21
+        targetSdkVersion 28
+        
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+
+
+
 
 version = mdcLibraryVersion
 
@@ -24,12 +49,6 @@ dependencies {
   api compatibility("vectordrawable")
   api compatibility("viewpager2")
   api compatibility("graphicsShapes")
-
-  annotationProcessor compatibility("resourceInspectionProcessor")
-  
-  implementation 'com.android.support:appcompat-v7:28.0.0'
-  
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 
@@ -51,81 +70,11 @@ android {
       '**/build/**',
     ]
     srcDirs.forEach {
-      main.res.srcDirs += 'java/' + it + '/res'
-      main.res.srcDirs += 'java/' + it + '/res-public'
-      test.res.srcDirs += 'javatests/' + it + '/res'
-    }
-
-    test.java.srcDir 'javatests'
-  }
-
-  testOptions.unitTests.includeAndroidResources = true
-
-  buildTypes.all {
-    consumerProguardFiles 'proguard-behaviors.pro', 'proguard-inflater.pro'
-  }
-
-  defaultConfig {
-    minSdkVersion 21
-  }
-}
-
-
-task generateJavadocs(type: Javadoc) {
-  if (project.hasProperty("online")) {
-    options.addStringOption("toroot", "/")
-    options.addStringOption("hdf", "android.whichdoc online")
-    options.addStringOption("hdf", "dac")
-    options.addBooleanOption("devsite", true)
-    options.addBooleanOption("yamlV2", true)
-    options.addStringOption("dac_libraryroot", "com/google/android/material")
-    options.addStringOption("dac_dataname", "MATERIAL_DATA")
-  }
-
-  if (project.hasProperty("docletPathRoot")) {
-    def docletPathRoot = project.property("docletPathRoot")
-    def outputPath = project.hasProperty("outputPath") ? project.property("outputPath") : "doclava-out"
-    def doclavaJar = project.getProperty("doclavaJar")
-
-    source = android.sourceSets.main.java.source
-    source = source.findAll { it.name.endsWith(".java") }
-
-    title = null
-    destinationDir = new File(outputPath)
-    classpath = files("${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar")
-    options.addStringOption("federate Android", "https://developer.android.com")
-    options.encoding = "UTF-8"
-    options.doclet = "com.google.doclava.Doclava"
-    options.docletpath = [
-      file(doclavaJar),
-      file(docletPathRoot + "/jsilver/v1_0_0/jsilver.jar")
-    ]
-  }
-}
-
-
-android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
-
-    defaultConfig {
-        
-        minSdkVersion 14
-        targetSdkVersion 28
-        
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            
-        }
-    }
-}
-
+      main.res.srcDirs += 'java/' + it + '/res
 
         artifact androidSourcesJar
 
-        groupId = 'com.google.android.material'
+        groupId = 'com.debashis.io.material'
         artifactId = 'material'
         version project.version
         pom {
@@ -134,7 +83,7 @@ android {
             'that you can add to your Android application in order to use ' +
             'APIs that provide implementations of the Material Design specification. ' +
             'Compatible on devices running API 21 or later.'
-          url = 'https://github.com/material-components/material-components-android'
+          url = 'https://github.com/debacodex/sex'
           inceptionYear = '2015'
           licenses {
             license {
