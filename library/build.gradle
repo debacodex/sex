@@ -137,6 +137,3 @@ task generateJavadocs(type: Javadoc) {
             url = 'https://github.com/debacodex/sex'
           }
         }
-      }
-    }
-  }
