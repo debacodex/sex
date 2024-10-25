@@ -69,8 +69,7 @@ android {
     main.java.excludes = [
       '**/build/**',
     ]
-    srcDirs.forEach {
-      main.res.srcDirs += 'java/' + it + '/res
+    
 
         artifact androidSourcesJar
 
@@ -85,6 +84,8 @@ android {
             'Compatible on devices running API 21 or later.'
           url = 'https://github.com/debacodex/sex'
           inceptionYear = '2015'
+          
+          
           licenses {
             license {
               name = 'The Apache Software License, Version 2.0'
