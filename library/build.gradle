@@ -1,26 +1,142 @@
-apply plugin: 'com.android.library'
+import org.gradle.internal.os.OperatingSystem
 
- 
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+version = mdcLibraryVersion
+
+dependencies {
+  api compatibility("activity")
+  api compatibility("annotation")
+  api compatibility("appcompat")
+  api compatibility("cardview")
+  api compatibility("coordinatorlayout")
+  api compatibility("constraintlayout")
+  api compatibility("core")
+  api compatibility("drawerlayout")
+  api compatibility("dynamicanimation")
+  api compatibility("experimental")
+  api compatibility("fragment")
+  api compatibility("lifecycleRuntime")
+  api compatibility("recyclerview")
+  api compatibility("resourceInspectionAnnotation")
+  api compatibility("transition")
+  api compatibility("vectordrawable")
+  api compatibility("viewpager2")
+  api compatibility("graphicsShapes")
+
+  annotationProcessor compatibility("resourceInspectionProcessor")
+  
+  implementation 'com.android.support:appcompat-v7:28.0.0'
+  
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+
+def srcDirs = [
+  'com/google/android/material/animation',
+  'com/debashis/io/material/button',
+  'com/debashis/io/material/tablayout',
+  'com/debashis/io/material/toast',
+  
+  ]
 
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+  sourceSets {
+    main.manifest.srcFile 'java/com/debashis/io/material/AndroidManifest.xml'
+    main.java.srcDir 'java'
+    main.java.includes = srcDirs.collect { it + '/**/*.java' }
+    main.java.excludes = [
+      '**/build/**',
+    ]
+    srcDirs.forEach {
+      main.res.srcDirs += 'java/' + it + '/res'
+      main.res.srcDirs += 'java/' + it + '/res-public'
+      test.res.srcDirs += 'javatests/' + it + '/res'
+    }
 
-    defaultConfig {
-        
-        minSdkVersion 21
-        targetSdkVersion 28
-        
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            
+    test.java.srcDir 'javatests'
+  }
+
+  testOptions.unitTests.includeAndroidResources = true
+
+  buildTypes.all {
+    consumerProguardFiles 'proguard-behaviors.pro', 'proguard-inflater.pro'
+  }
+
+  defaultConfig {
+    minSdkVersion 21
+  }
+}
+
+
+task generateJavadocs(type: Javadoc) {
+  if (project.hasProperty("online")) {
+    options.addStringOption("toroot", "/")
+    options.addStringOption("hdf", "android.whichdoc online")
+    options.addStringOption("hdf", "dac")
+    options.addBooleanOption("devsite", true)
+    options.addBooleanOption("yamlV2", true)
+    options.addStringOption("dac_libraryroot", "com/google/android/material")
+    options.addStringOption("dac_dataname", "MATERIAL_DATA")
+  }
+
+  if (project.hasProperty("docletPathRoot")) {
+    def docletPathRoot = project.property("docletPathRoot")
+    def outputPath = project.hasProperty("outputPath") ? project.property("outputPath") : "doclava-out"
+    def doclavaJar = project.getProperty("doclavaJar")
+
+    source = android.sourceSets.main.java.source
+    source = source.findAll { it.name.endsWith(".java") }
+
+    title = null
+    destinationDir = new File(outputPath)
+    classpath = files("${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar")
+    options.addStringOption("federate Android", "https://developer.android.com")
+    options.encoding = "UTF-8"
+    options.doclet = "com.google.doclava.Doclava"
+    options.docletpath = [
+      file(doclavaJar),
+      file(docletPathRoot + "/jsilver/v1_0_0/jsilver.jar")
+    ]
+  }
+}
+
+
+
+
+
+        artifact androidSourcesJar
+
+        groupId = 'com.google.android.material'
+        artifactId = 'material'
+        version project.version
+        pom {
+          name = 'Material Components for Android'
+          description = 'Material Components for Android is a static library ' +
+            'that you can add to your Android application in order to use ' +
+            'APIs that provide implementations of the Material Design specification. ' +
+            'Compatible on devices running API 21 or later.'
+          url = 'https://github.com/material-components/material-components-android'
+          inceptionYear = '2015'
+          licenses {
+            license {
+              name = 'The Apache Software License, Version 2.0'
+              url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+              distribution = 'repo'
+            }
+          }
+          developers {
+            developer {
+              name = 'The Android Open Source Project'
+            }
+          }
+          scm {
+            connection = 'scm:git:https://github.com/material-components/material-components-android.git'
+            url = 'https://github.com/material-components/material-components-android'
+          }
         }
+      }
     }
-}
-dependencies {
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-}
+  }
