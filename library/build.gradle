@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
+//apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 28
@@ -23,83 +23,3 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
-
-
-
-
-
-version = mdcLibraryVersion
-
-dependencies {
-  api compatibility("activity")
-  api compatibility("annotation")
-  api compatibility("appcompat")
-  api compatibility("cardview")
-  api compatibility("coordinatorlayout")
-  api compatibility("constraintlayout")
-  api compatibility("core")
-  api compatibility("drawerlayout")
-  api compatibility("dynamicanimation")
-  api compatibility("experimental")
-  api compatibility("fragment")
-  api compatibility("lifecycleRuntime")
-  api compatibility("recyclerview")
-  api compatibility("resourceInspectionAnnotation")
-  api compatibility("transition")
-  api compatibility("vectordrawable")
-  api compatibility("viewpager2")
-  api compatibility("graphicsShapes")
-}
-
-
-def srcDirs = [
-  'com/google/android/material/animation',
-  'com/debashis/io/material/button',
-  'com/debashis/io/material/tablayout',
-  'com/debashis/io/material/toast',
-  
-  ]
-
-
-android {
-  sourceSets {
-    main.manifest.srcFile 'java/com/debashis/io/material/AndroidManifest.xml'
-    main.java.srcDir 'java'
-    main.java.includes = srcDirs.collect { it + '/**/*.java' }
-    main.java.excludes = [
-      '**/build/**',
-    ]
-    
-
-        artifact androidSourcesJar
-
-        groupId = 'com.debashis.io.material'
-        artifactId = 'material'
-        version project.version
-        pom {
-          name = 'Material Components for Android'
-          description = 'Material Components for Android is a static library ' +
-            'that you can add to your Android application in order to use ' +
-            'APIs that provide implementations of the Material Design specification. ' +
-            'Compatible on devices running API 21 or later.'
-          url = 'https://github.com/debacodex/sex'
-          inceptionYear = '2015'
-          
-          
-          licenses {
-            license {
-              name = 'The Apache Software License, Version 2.0'
-              url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-              distribution = 'repo'
-            }
-          }
-          developers {
-            developer {
-              name = 'The Android Open Source Project'
-            }
-          }
-          scm {
-            connection = 'scm:git:https://github.com/debacodex/sex.git'
-            url = 'https://github.com/debacodex/sex'
-          }
-        }
